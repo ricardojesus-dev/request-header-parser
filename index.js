@@ -20,8 +20,24 @@ app.get('/', function (req, res) {
 });
 
 // your first API endpoint...
-app.get('/api/hello', function (req, res) {
-  res.json({ greeting: 'hello API' });
+// API endpoint que devuelve la información del cliente
+app.get('/api/whoami', function (req, res) {
+  // Obtener la IP del cliente
+  // En entornos con proxy (como Render, Heroku, Glitch), la IP real puede estar en 'x-forwarded-for'
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
+
+  // Obtener el idioma preferido desde el encabezado Accept-Language
+  const language = req.headers['accept-language'];
+
+  // Obtener el User-Agent (información del sistema/navegador)
+  const software = req.headers['user-agent'];
+
+  // Devolver la respuesta en JSON
+  res.json({
+    ipaddress: ip,
+    language: language,
+    software: software
+  });
 });
 
 // listen for requests :)
